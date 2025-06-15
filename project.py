@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 def conversion(value):
     try:
@@ -17,7 +18,7 @@ def main():
     co2 = pd.read_csv("co2_pcap_cons.csv")
     gdp = pd.read_csv("gdp_pcap.csv")
     pop = pd.read_csv("pop.csv")
-    cont = pd.read_csv("countries_continents.csv")
+    country = pd.read_csv("countries_continents.csv")
 
     co2 = co2.melt(id_vars=["country"], var_name="year", value_name="co2")
     gdp = gdp.melt(id_vars=["country"], var_name="year", value_name="gdp")
@@ -33,10 +34,23 @@ def main():
 
     data = pd.merge(co2, gdp, on=["country", "year"], how="inner")
     data = pd.merge(data, pop, on=["country", "year"], how="inner")
-    data = pd.merge(data, cont, on="country")
+    data = pd.merge(data, country, left_on="country", right_on="Country")
 
-    data.set_index(["Continent", "Country", "year"], inplace=True)
+    data.set_index(["Continent", "country", "year"], inplace=True)
     data.sort_index(inplace=True)
+
+    data.reset_index(inplace=True)
+
+    cName = 'Canada'
+
+    cData = data[data["Country"] == cName].sort_values("year")
+
+    plt.figure(figsize=(10,5))
+    plt.plot(cData["year"], cData["population"]/1000000)
+    plt.title("Population of Canada")
+    plt.xlabel("Year")
+    plt.ylabel("Population in millions")
+    plt.show()
 
 
 if __name__ == "__main__":
