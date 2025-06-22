@@ -70,5 +70,4 @@ class DataLoader:
         data["total_co2"] = data["co2"]*data["population"]
         data["total_gdp"] = data["gdp"]*data["population"]
         data.reset_index(inplace=True)
-
         return data
