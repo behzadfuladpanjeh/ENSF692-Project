@@ -10,8 +10,8 @@ Africa,Cape Verde
 Africa,Central African Republic
 Africa,Chad
 Africa,Comoros
-Africa,Congo
-Africa,Democratic Republic of Congo
+Africa,"Congo, Rep."
+Africa,"Congo, Dem. Rep."
 Africa,Djibouti
 Africa,Egypt
 Africa,Equatorial Guinea
@@ -58,7 +58,7 @@ Asia,Bahrain
 Asia,Bangladesh
 Asia,Bhutan
 Asia,Brunei
-Asia,Burma (Myanmar)
+Asia,Myanmar
 Asia,Cambodia
 Asia,China
 Asia,East Timor
@@ -95,7 +95,7 @@ Asia,Tajikistan
 Asia,Thailand
 Europe,Turkey
 Asia,Turkmenistan
-Asia,United Arab Emirates
+Asia,UAE
 Asia,Uzbekistan
 Asia,Vietnam
 Asia,Yemen
@@ -110,7 +110,7 @@ Europe,Bosnia and Herzegovina
 Europe,Bulgaria
 Europe,Croatia
 Europe,Cyprus
-Europe,Czechia
+Europe,Czech Republic
 Europe,Denmark
 Europe,Estonia
 Europe,Finland
@@ -144,7 +144,7 @@ Europe,Spain
 Europe,Sweden
 Europe,Switzerland
 Europe,Ukraine
-Europe,United Kingdom
+Europe,UK
 Europe,Vatican City
 North America,Antigua and Barbuda
 North America,Bahamas
@@ -168,7 +168,7 @@ North America,Saint Kitts and Nevis
 North America,Saint Lucia
 North America,Saint Vincent and the Grenadines
 North America,Trinidad and Tobago
-North America,United States
+North America,USA
 Oceania,Australia
 Oceania,Fiji
 Oceania,Kiribati
