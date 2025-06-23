@@ -40,7 +40,8 @@ class DataLoader:
         #make sure that the columns are the same for merging
         co2.rename(columns={"country": "Country"}, inplace=True)
         gdp.rename(columns={"country": "Country"}, inplace=True)
-        pop.rename(columns={"country": "Country"}, inplace=True)    
+        pop.rename(columns={"country": "Country"}, inplace=True)   
+        cont.rename(columns={"country":"Country", "continent":"Continent"}, inplace=True) 
 
         #convert wide format to long format
         #used reference [1]
@@ -61,13 +62,14 @@ class DataLoader:
         #merge all datasetse
         data = pd.merge(co2, gdp, on=["Country", "year"], how="inner") #merge the co2 and gdp datasets on country and year, only keeps rows where both data are available
         data = pd.merge(data, pop, on=["Country", "year"], how="inner") #merge data with population data based on country and year
-        data = pd.merge(data, cont, on="Country") #merge data with continent and using country as a key
+        data = pd.merge(data, cont, on="Country", how="left") #merge data with continent and using country as a key
 
+        #compute total gdp and co2
+        data["total_gdp"] = data["gdp"]*data["population"]
+        data["total_co2"] = data["co2"]*data["population"]
               
         #sort data
         data.set_index(["Continent", "Country", "year"], inplace=True)#indexing by the Continent, Country and year
         data.sort_index(inplace=True) #sort data by index
-        data["total_co2"] = data["co2"]*data["population"]
-        data["total_gdp"] = data["gdp"]*data["population"]
         data.reset_index(inplace=True)
         return data
