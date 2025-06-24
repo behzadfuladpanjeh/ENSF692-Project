@@ -1,3 +1,4 @@
+#This class loads, cleans, and merges the excel files together to be used later in the projec.py for analysis.
 import pandas as pd
 import numpy as np
 

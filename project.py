@@ -4,7 +4,7 @@ ENSF 692 Group Project
 @Authors: Behzad, Matin
 @Group: Group #5
 
-This program so far imports global datasets (CO2 emissions, GDP per capita, population and continents), merges, cleans, reshapes, and visualizes the data.
+This program imports global datasets (CO2 emissions, GDP per capita, population and continents), merges, cleans, reshapes, and visualizes the data with user input for analysis.
 """
 
 #references
@@ -22,18 +22,20 @@ This program so far imports global datasets (CO2 emissions, GDP per capita, popu
 #[12] Matplotlib documentation, "Chooseing Colormaps in Matplotlib," Matplotlib 3.8.4 documentation. [Online]. Available: https://matplotlib.org/stable/users/explain/colors/colormaps.html. [Accessed: June 21, 2025].
 #[13] Matplotlib documentation, "matplotlib.pyplot.xticks," Matplotlib 3.8.4 documentation. [Online]. Available: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xticks.html. [Accessed: June 21, 2025].
 #[14] Matplotlib documentation, "matplotlib.pyplot.yticks," Matplotlib 3.8.4 documentation. [Online]. Available: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.yticks.html. [Accessed: June 21, 2025].
-
+#[15] Python Software Foundation, "os - Miscellaneous operating system interfaces," Python 3.11.4 documentation. [Online]. Available: https://docs.python.org/3/library/os.html. [Accessed: June 22, 2025].
+#[16] Python Software Foundation, "sys - System-specific parameters and functions interfaces," Python 3.11.4 documentation. [Online]. Available: https://docs.python.org/3/library/sys.html. [Accessed: June 22, 2025].
+#[17] Seaborn Development Team, "scatterplot, lineplot functions," Seaborn 0.12.2 Documentation. [Online]. Available: https://seaborn.pydata.org/api.html. [Accessed: June 22, 2025].
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import sys
-import seaborn as sns
+import os #[15]
+import sys #[16]
+import seaborn as sns #[17]
 
 sys.path.append(os.path.dirname(__file__))
 
-from data_loader import DataLoader
+from modules.data_loader import DataLoader
 
 #Study 1 plots, graphs
 def scatter_gdp_vs_co2(data, year_filter):
@@ -55,8 +57,8 @@ def scatter_gdp_vs_co2(data, year_filter):
     plt.xscale("log")
     plt.yscale("log")
     plt.title(f"GDP vs CO₂ per Capita ({year_filter})")
-    plt.xlabel("GDP per Capita (USD, log scale)")
-    plt.ylabel("CO₂ per Capita (tons, log scale)")
+    plt.xlabel(f"GDP per Capita (USD, log scale)")
+    plt.ylabel(f"CO₂ per Capita (tons, log scale)")
     plt.legend()
     plt.tight_layout()
     filename = f"study1_scatter_gdp_co2_{year_filter}.png"
@@ -107,7 +109,7 @@ def top_co2_with_gdp(data, year):
     ax2.tick_params(axis='y', labelcolor='orange')
 
     #Title and x-ticks
-    ax1.set_title('Top 15 Countries by Total CO2 Emissions with Total GDP {year}')
+    ax1.set_title(f'Top 15 Countries by Total CO2 Emissions with Total GDP ({year})')
     ax1.set_xticks(x)
     ax1.set_xticklabels(countries, rotation=45, ha='right')
 
@@ -150,7 +152,7 @@ def trend_for_selected_countries(data, selected_countries):
         ax2.tick_params(axis='y', labelcolor="red")
 
         plt.tight_layout()
-        filename = f"study1_time_series_{selected_countries}.png"
+        filename = f"study1_time_series_{country}.png"
         plt.savefig(filename)
         plt.show()
         print(f"Saved time-series plot as {filename}")
@@ -174,7 +176,7 @@ def correlation_trend(data):
     # Plot the correlation trend over time
     plt.figure(figsize=(12, 6))
     sns.lineplot(data=correlation_by_year, x="year", y="pearson_correlation", marker="o")
-    plt.title("Pearson Correlation Between GDP and CO2 per Capita Over Time")
+    plt.title(f"Pearson Correlation Between GDP and CO2 per Capita Over Time")
     plt.xlabel("Year")
     plt.ylabel("Pearson Correlation Coefficient")
     plt.grid(True)
@@ -240,7 +242,7 @@ def bar_highpop_lowemissions(data, year):
     fig, ax = plt.subplots(figsize=(12, 6))
     bars = ax.bar(low_emissions_sorted['Country'], low_emissions_sorted['co2'], color='green')
     ax.set_ylabel('CO₂ per Capita (tons)')
-    ax.set_title('High Population Countries with Low CO₂ Emissions per Capita {year}')
+    ax.set_title(f'High Population Countries with Low CO₂ Emissions per Capita ({year})')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
     filename = f"study2_bar_highpop_lowemissions_{year}.png"
@@ -348,22 +350,19 @@ def scatter_cont_pop_vs_co2(data, year_filter, top_n):
     Returns
         None
     """
-    # Define the year and number of countries to display
-    scatter_data = data[data["year"] == year_filter]
-
     # Filter and prepare the data
-    df_year = data[data["year"] == year_filter].copy()
+    scatter_data = data[data["year"] == year_filter].copy()
 
     # Drop missing or invalid values
-    df_year = df_year.dropna(subset=["co2", "gdp"])
-    df_year = df_year.replace([np.inf, -np.inf], np.nan)
-    df_year = df_year.dropna(subset=["co2", "gdp"])
+    scatter_data = scatter_data.dropna(subset=["co2", "gdp"])
+    scatter_data = scatter_data.replace([np.inf, -np.inf], np.nan)
+    scatter_data = scatter_data.dropna(subset=["co2", "gdp"])
 
     # Calculate carbon intensity: CO2 per unit of GDP
-    df_year["co2_per_gdp"] = df_year["co2"] / df_year["gdp"]
+    scatter_data["co2_per_gdp"] = scatter_data["co2"] / scatter_data["gdp"]
 
     # Sort and select top N
-    top_countries = df_year.sort_values(by="co2_per_gdp", ascending=False).head(top_n)
+    top_countries = scatter_data.sort_values(by="co2_per_gdp", ascending=False).head(top_n)
 
     # Plotting
     import matplotlib.pyplot as plt
@@ -423,10 +422,10 @@ def timeseries_count(data, countries, start_year):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    filename = f"study4_gdp_overtime_{start_year or 'all'}.png"
-    plt.savefig(filename)
+    gdp_filename = f"study4_gdp_overtime_{start_year or 'all'}.png"
+    plt.savefig(gdp_filename)
     plt.show()
-    print(f"Saved GDP over time as {filename}")
+    print(f"Figures saved as {gdp_filename}")
 
     #plot co2 emissions per capita over time
     plt.figure(figsize=(10, 6))
@@ -439,9 +438,10 @@ def timeseries_count(data, countries, start_year):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    filename = f"study4_emmissions_capita.png"
+    co2_filename = f"study4_emmissions_capita.png"
+    plt.savefig(co2_filename)
     plt.show()
-    print(f"Saved plot as {filename}")
+    print(f"Saved plot as {co2_filename}")
 
     #plot 3 population over time
     plt.figure(figsize=(10, 6))
@@ -454,10 +454,10 @@ def timeseries_count(data, countries, start_year):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    filename = f"study4_population_overtime.png"
-    plt.savefig(filename)
+    pop_filename = f"study4_population_overtime.png"
+    plt.savefig(pop_filename)
     plt.show()
-    print(f"Saved plot as {filename}")
+    print(f"Saved plot as {pop_filename}")
 
 #study 5 plots, graphs
 def emissions_continents(data, year):
@@ -613,7 +613,7 @@ def most_improved(data, start_year, end_year, n):
     plt.grid(axis='x', linestyle='--', alpha=0.7)
     plt.tight_layout()
     filename = f"study7_most_improved.png"
-    plt.savefig
+    plt.savefig(filename)
     plt.show()
     print(f"Graph saved as {filename}")
 
@@ -662,7 +662,10 @@ def trend_specific_country_year(data, country, year):
     plt.title(f"{country} - CO₂, GDP, and Population Over Time")
     fig.tight_layout()
     plt.grid(True)
+    filename = f"study8_country_trends.png"
+    plt.savefig(filename)
     plt.show()
+    print(f"Figure saved as {filename}")
 
 #user inputs
 def get_year(data):
@@ -676,10 +679,10 @@ def get_year(data):
         user input as int, if its a valid year
     """
     while True:
-        user_input = ("Enter a year: ")
+        user_input = input("Enter a year: ")
         if user_input.isdigit() and int(user_input) in data['year'].unique():
             return int(user_input)
-        print("Please enter a valid year from 1800-2022")
+        print("Please enter a valid year in a range from 1800-2022")
 
 def get_countries(data):
     """gets a list of user input countries and returns it if its valid and unique from the dataframe
@@ -923,19 +926,70 @@ def study8_menu(data):
     Return
         None
     """
+    #checks for unique country and year
+    check_country = data['Country'].unique()
+    check_year = data['year'].unique()
+
     while True:
         print("Study 8 Menu: a) Start b) exit")
         user_input = input("Please enter a letter from the menu: ").lower()
         if user_input == 'a':
-            trend_specific_country_year(data, get_countries, get_year)
+            #akss for single country
+            while True:
+                country = input("Enter a single country: ").strip()
+                if country in check_country:
+                    break
+                print(f"{country} not found, try again with a valid country. ex. Algeria")
+
+            while True:
+                #asks for multiple years seperated by comma
+                years_input = input("Enter years seperated by commas (ex. 2000, 2001, 2002,...)")
+                try:
+                    #splits years by comma
+                    years = [int(y.strip()) for y in years_input.split(',')]
+                except ValueError:
+                    print("Please enter only valid years, seperated by commas")
+                    continue
+                #checcks if the years inputted by usser is actually in dataset    
+                invalid_years = [y for y in years if y not in check_year]
+                if invalid_years:
+                    print(f"Years are not in dataset: {invalid_years}")
+                    continue
+                break
+        
+            trend_specific_country_year(data, country, years)
+
         elif user_input == 'b':
             break
         else:
             print("Please enter a correct letter from the sub menu") 
 
 if __name__ == "__main__":
+    #loads, cleans, and merges data
     loader = DataLoader()
     data = loader.load_and_prepare_data()
+
+    #drop duplicate rows
+    data.drop_duplicates(inplace=True)
+
+    #prints the head of the dataset
+    print("Describing the datasets of the first 5 rows from head()")
+    print(data.head(5))
+
+    #prints describe of the dataset
+    print("Using the describe() function to show the dataset analysis")
+    print(data.describe())
+
+    #pivot table requirement
+    pivot_table_co2 = data.pivot_table(values='co2', index='Continent', columns='year', aggfunc='mean')
+    print("Printing pivot table of the CO2 per capita by continent and year")
+    print(pivot_table_co2)
+
+    #export cleaned and merged dataframe to excel
+    data.to_excel('cleaned_merged_dataframe.xlsx', index=True)
+    print(f"Exported excel file is named as cleaned_merged_dataframe.xlsx")
+
+    #run program
     main_menu(data)
 
 
