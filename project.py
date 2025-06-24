@@ -561,10 +561,6 @@ def co2_emissions_population(data, year):
 
 #study 7 plots, graphs
 
-#study 8 plots, graphs
-
-#study 9 plots, graphs
-
 #user inputs
 def get_year(data):
     """gets the user input of the year
@@ -628,7 +624,7 @@ def main_menu(data):
     Returns
         none
     """
-    titles=["Economic Growth vs Emissions", "High Population, Low Emissions", "CO2 per GDP", "Time-Series", "Continental Emissiosn Comparison", "CO2 Emissions vs Population", "Most improved", "Devloped vs Developing Countries", "Outliers in Emissions"]
+    titles=["Economic Growth vs Emissions", "High Population, Low Emissions", "CO2 per GDP", "Time-Series", "Continental Emissiosn Comparison", "CO2 Emissions vs Population", "Most improved"]
     while True:
         for i,t in enumerate(titles,1):
             print(f"{i}) {t}")
@@ -648,15 +644,21 @@ def main_menu(data):
             study6_menu(data)
         elif user_input == '7':
             study7_menu(data)
-        elif user_input == '8':
-            study8_menu(data)
-        elif user_input == '9':
-            study9_menu(data)
         elif user_input == '0':
             break
 
 #add sub menu for each study
 def study1_menu(data):
+    """study 1 menu that prompts user to input what plot/graph they want and it gives them a figure
+
+    Parameters
+    ----------
+    data : dataframe 
+        contains the cleaned and merged data from csv files
+
+    Return
+        None
+    """
     while True:
         print("Study 1 Menu: a) Scatter b) Bar c) Trend d) Correlation e) exit")
         user_input = input("Please enter a letter from the menu: ").lower()
@@ -674,6 +676,16 @@ def study1_menu(data):
             print("Please enter a correct letter from the sub menu")  
 
 def study2_menu(data):
+    """study 2 menu that prompts user to input what plot/graph they want and it gives them a figure
+
+    Parameters
+    ----------
+    data : dataframe 
+        contains the cleaned and merged data from csv files
+
+    Return
+        None
+    """
     while True:
         print("Study 2 Menu: a) Scatter b) Bar c) Bubble d) Correlation e) exit")
         user_input = input("Please enter a letter from the menu: ").lower()
@@ -691,6 +703,16 @@ def study2_menu(data):
             print("Please enter a correct letter from the sub menu")  
 
 def study3_menu(data):
+    """study 3 menu that prompts user to input what plot/graph they want and it gives them a figure
+
+    Parameters
+    ----------
+    data : dataframe 
+        contains the cleaned and merged data from csv files
+
+    Return
+        None
+    """
     while True:
         print("Study 3 Menu: a) Scatter b) exit")
         user_input = input("Please enter a letter from the menu: ").lower()
@@ -702,16 +724,69 @@ def study3_menu(data):
             print("Please enter a correct letter from the sub menu")  
 
 def study4_menu(data):
+    """study 4 menu that prompts user to input if they want to start to get the figures or exit
+
+    Parameters
+    ----------
+    data : dataframe 
+        contains the cleaned and merged data from csv files
+
+    Return
+        None
+    """
+    while True:
+        print("Study 4 Menu: a) Start b) exit")
+        user_input = input("Please enter a letter from the menu: ").lower()
+        if user_input == 'a':
+            timeseries_count(data, get_countries(data), get_year(data))
+        elif user_input == 'b':
+            break
+        else:
+            print("Please enter a correct letter from the sub menu") 
 
 def study5_menu(data):
+    """study 5 menu that prompts user to input if they want to start to get the figures or exit
+
+    Parameters
+    ----------
+    data : dataframe 
+        contains the cleaned and merged data from csv files
+
+    Return
+        None
+    """
+    while True:
+        print("Study 5 Menu: a) Start b) exit")
+        user_input = input("Please enter a letter from the menu: ").lower()
+        if user_input == 'a':
+            emissions_continents(data, get_year(data))
+        elif user_input == 'b':
+            break
+        else:
+            print("Please enter a correct letter from the sub menu") 
 
 def study6_menu(data):
+    """study 6 menu that prompts user to input if they want to start to get the figures or exit
+
+    Parameters
+    ----------
+    data : dataframe 
+        contains the cleaned and merged data from csv files
+
+    Return
+        None
+    """
+    while True:
+        print("Study 6 Menu: a) Start b) exit")
+        user_input = input("Please enter a letter from the menu: ").lower()
+        if user_input == 'a':
+            co2_emissions_population(data, get_year(data))
+        elif user_input == 'b':
+            break
+        else:
+            print("Please enter a correct letter from the sub menu") 
 
 def study7_menu(data):
-
-def study8_menu(data):
-
-def study9_menu(data):
 
 if __name__ == "__main__":
     loader = DataLoader()
