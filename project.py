@@ -400,7 +400,7 @@ def timeseries_count(data, countries, start_year):
     data : dataframe
         cleaned data that contains continent, country, years and other useful information
     countries : an array of string
-        countires inputted by user
+        countries inputted by user
     start_year : int
         start year that the user wants the plot to start at
 
@@ -461,7 +461,7 @@ def timeseries_count(data, countries, start_year):
 
 #study 5 plots, graphs
 def emissions_continents(data, year):
-    """plot co2 per capita, for specified countires and years
+    """plot co2 per capita, for specified countries and years
 
     Parameters
     ----------
@@ -699,7 +699,7 @@ def get_countries(data):
     """
     check = data['Country'].unique()
     while True:
-        user_input = input("Enter countires seperated by commas: ")
+        user_input = input("Enter countries seperated by commas: ")
         count = [inp.strip() for inp in user_input.split(',')]
         if all(inp in check for inp in count):
             return count
@@ -730,7 +730,7 @@ def main_menu(data):
     Returns
         none
     """
-    titles=["Economic Growth vs Emissions", "High Population, Low Emissions", "CO2 per GDP", "Time-Series", "Continental Emissiosn Comparison", "CO2 Emissions vs Population", "Most improved", "CO2 and GDP for Specified Country and Year"]
+    titles=["Economic Growth vs Emissions", "High Population, Low Emissions", "CO2 per GDP", "Time-Series", "Continental Emissions Comparison", "CO2 Emissions vs Population", "Most improved", "CO2 and GDP for Specified Country and Year"]
     while True:
         for i,t in enumerate(titles,1):
             print(f"{i}) {t}")
