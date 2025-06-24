@@ -509,6 +509,7 @@ def emissions_continents(data, year):
 
 #study 6 plots, graphs
 
+
 #study 7 plots, graphs
 
 #study 8 plots, graphs
