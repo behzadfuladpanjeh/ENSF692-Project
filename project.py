@@ -333,9 +333,8 @@ def corr_pop_co2(data):
     print(f"Saved Pearson correlation graph saved as {filename}")
 
 #study 3 plots, graphs
-def scatter_cont_pop_vs_co2(data, year_filter):
+def scatter_cont_pop_vs_co2(data, year_filter, top_n):
     # Define the year and number of countries to display
-    top_n = 15
     scatter_data = data[data["year"] == year_filter]
 
     # Filter and prepare the data
@@ -481,6 +480,63 @@ def main_menu(data):
         elif user_input == '0':
             break
 
+#add sub menu for each study
+def study1_menu(data):
+    while True:
+        print("Study 1 Menu: a) Scatter b) Bar c) Trend d) Correlation e) exit")
+        user_input = input("Please enter a letter from the menu: ").lower()
+        if user_input == 'a':
+            scatter_gdp_vs_co2(data, get_year(data))
+        elif user_input == 'b':
+            top_co2_with_gdp(data, get_year(data))
+        elif user_input == 'c':
+            trend_for_selected_countries(data, get_countries(data))
+        elif user_input == 'd':
+            correlation_trend(data)
+        elif user_input == 'e':
+            break
+        else:
+            print("Please enter a correct letter from the sub menu")  
+
+def study2_menu(data):
+    while True:
+        print("Study 2 Menu: a) Scatter b) Bar c) Bubble d) Correlation e) exit")
+        user_input = input("Please enter a letter from the menu: ").lower()
+        if user_input == 'a':
+            scatter_pop_vs_co2(data, get_year(data))
+        elif user_input == 'b':
+            bar_highpop_lowemissions(data, get_year(data))
+        elif user_input == 'c':
+            bubble_pop_vs_co2(data, get_year(data))
+        elif user_input == 'd':
+            corr_pop_co2(data)
+        elif user_input == 'e':
+            break
+        else:
+            print("Please enter a correct letter from the sub menu")  
+
+def study3_menu(data):
+    while True:
+        print("Study 3 Menu: a) Scatter b) exit")
+        user_input = input("Please enter a letter from the menu: ").lower()
+        if user_input == 'a':
+            scatter_cont_pop_vs_co2(data, get_year(data), get_n())
+        elif user_input == 'b':
+            break
+        else:
+            print("Please enter a correct letter from the sub menu")  
+
+def study4_menu(data):
+
+def study5_menu(data):
+
+def study6_menu(data):
+
+def study7_menu(data):
+
+def study8_menu(data):
+
+def study9_menu(data):
 
 if __name__ == "__main__":
     main()
