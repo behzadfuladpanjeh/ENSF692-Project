@@ -508,7 +508,56 @@ def emissions_continents(data, year):
     print(f"Saved plot as {filename}")
 
 #study 6 plots, graphs
+def co2_emissions_population(data, year):
+    """creatinga a plot to visualize the correlation between co2 emissions and population for a specified year
 
+    Parameters
+    ----------
+    data : dataframe
+        cleaned and merged csv files that contain continents, countries, years and other useful information
+    year : int
+        a year inputted by the user
+
+    Return
+        None
+    """
+    data_year = data[data["year"] == year].copy()
+    n = 15
+    # Drop missing or invalid values
+    data_year = data_year.dropna(subset=["co2", "gdp"])
+    data_year = data_year.replace([np.inf, -np.inf], np.nan)
+    data_year = data_year.dropna(subset=["co2", "gdp"])
+
+    # Create scatter plot with log scales
+    plt.figure(figsize=(10, 6))
+    scatter = plt.scatter(
+        data_year["population"],
+        data_year["total_co2"],
+        alpha=0.7,
+        c='blue',
+        edgecolors='k',
+        s=50
+    )
+
+    # Annotate countries (optional: show only top emitters or sampled subset to avoid clutter)
+    for i, row in data_year.nlargest(n, "total_co2").iterrows():
+        plt.annotate(row["Country"], (row["population"], row["total_co2"]), fontsize=10)
+
+    # Log scales
+    plt.xscale("log")
+    plt.yscale("log")
+
+    # Labels and title
+    plt.xlabel("Population (log scale)")
+    plt.ylabel("Total CO₂ Emissions (log scale)")
+    plt.title(f"CO₂ Emissions vs. Population (Log-Log Scale) - {year}")
+    plt.grid(True, which="both", linestyle="--", alpha=0.5)
+
+    plt.tight_layout()
+    filename = f"study6_co2_emissions_vs_pop.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Plot saved as {filename}")
 
 #study 7 plots, graphs
 
