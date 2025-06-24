@@ -334,6 +334,20 @@ def corr_pop_co2(data):
 
 #study 3 plots, graphs
 def scatter_cont_pop_vs_co2(data, year_filter, top_n):
+    """scatter plot between continents, population and co2
+
+    Parameters
+    ----------
+    data : dataframe 
+        cleaned data that contains continent, country, years and other useful information
+    year_filter : int
+        user input for year
+    top_n : int
+        number of continents they want to include
+
+    Returns
+        None
+    """
     # Define the year and number of countries to display
     scatter_data = data[data["year"] == year_filter]
 
@@ -379,10 +393,171 @@ def scatter_cont_pop_vs_co2(data, year_filter, top_n):
     print(f"Saved scatter plot as {filename}")
 
 #study 4 plots, graphs
+def timeseries_count(data, countries, start_year):
+    """plot of 3 different things for gdp per capita over time, co2 emissions per capita over time, and population over time
+
+    Parameters
+    ----------
+    data : dataframe
+        cleaned data that contains continent, country, years and other useful information
+    countries : an array of string
+        countires inputted by user
+    start_year : int
+        start year that the user wants the plot to start at
+
+    REturns
+        None
+    """
+    data_filtered = data.copy()
+    if start_year:
+        data_filtered = data_filtered[data_filtered['year'] >= start_year]
+
+    #plot GDP per capita over time
+    plt.figure(figsize=(10, 6))
+    for country in countries:
+        subset = data_filtered[data_filtered['Country'] == country]
+        plt.plot(subset['year'], subset['gdp'], label=country)
+    plt.title(f"GDP per Capita ({start_year or data_filtered['year'].min()}–{data_filtered['year'].max()})")
+    plt.xlabel('Year')
+    plt.ylabel('GDP per Capita (USD)')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    filename = f"study4_gdp_overtime_{start_year or 'all'}.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Saved GDP over time as {filename}")
+
+    #plot co2 emissions per capita over time
+    plt.figure(figsize=(10, 6))
+    for country in countries:
+        subset = data_filtered[data_filtered["Country"] == country]
+        plt.plot(subset["year"], subset["co2"], label=country)
+    plt.title(f"CO₂ Emissions per Capita ({start_year or data_filtered['year'].min()}–{data_filtered['year'].max()})")
+    plt.xlabel("Year")
+    plt.ylabel("CO₂ per Capita (tons)")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    filename = f"study4_emmissions_capita.png"
+    plt.show()
+    print(f"Saved plot as {filename}")
+
+    #plot 3 population over time
+    plt.figure(figsize=(10, 6))
+    for country in countries:
+        subset = data_filtered[data_filtered["Country"] == country]
+        plt.plot(subset["year"], subset["population"] / 1e6, label=country)  # Convert to millions
+    plt.title(f"Population in Millions ({start_year or data_filtered['year'].min()}–{data_filtered['year'].max()})")
+    plt.xlabel("Year")
+    plt.ylabel("Population (Millions)")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    filename = f"study4_population_overtime.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Saved plot as {filename}")
 
 #study 5 plots, graphs
+def emissions_continents(data, year):
+    """plot co2 per capita, for specified countires and years
+
+    Parameters
+    ----------
+    data : dataframe
+        cleaned and merged csv files that contain continents, countries, years and other useful information
+    year : int
+        year that is specified by the user input
+    
+    Return
+        None
+    """
+    #filter for selected coutnries and years
+    data_year = data[data["year"] == year]
+
+    # Drop rows with missing values
+    data_year = data_year.dropna(subset=["co2", "gdp"])
+
+    # Group by continent and calculate average CO₂ and GDP per capita
+    continent_summary = data_year.groupby("Continent")[["co2", "gdp"]].mean().sort_values("co2", ascending=False)
+
+    # Plotting
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+
+    # Plot CO₂ per capita
+    color1 = 'skyblue'
+    ax1.bar(continent_summary.index, continent_summary["co2"], color=color1, width=0.4, label="CO₂ per Capita")
+    ax1.set_ylabel("Average CO₂ per Capita (tons)", color=color1)
+    ax1.tick_params(axis='y', labelcolor=color1)
+
+    # Add second Y-axis for GDP per capita
+    ax2 = ax1.twinx()
+    color2 = 'orange'
+    ax2.plot(continent_summary.index, continent_summary["gdp"], color=color2, marker='o', label="GDP per Capita")
+    ax2.set_ylabel("Average GDP per Capita (USD)", color=color2)
+    ax2.tick_params(axis='y', labelcolor=color2)
+
+    # Title and layout
+    plt.title(f"Average CO₂ and GDP per Capita by Continent ({year})")
+    plt.grid(True, axis='y', linestyle='--', alpha=0.5)
+    fig.tight_layout()
+    filename = f"study5_emmissions_continents.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Saved plot as {filename}")
 
 #study 6 plots, graphs
+def co2_emissions_population(data, year):
+    """creatinga a plot to visualize the correlation between co2 emissions and population for a specified year
+
+    Parameters
+    ----------
+    data : dataframe
+        cleaned and merged csv files that contain continents, countries, years and other useful information
+    year : int
+        a year inputted by the user
+
+    Return
+        None
+    """
+    data_year = data[data["year"] == year].copy()
+    n = 15
+    # Drop missing or invalid values
+    data_year = data_year.dropna(subset=["co2", "gdp"])
+    data_year = data_year.replace([np.inf, -np.inf], np.nan)
+    data_year = data_year.dropna(subset=["co2", "gdp"])
+
+    # Create scatter plot with log scales
+    plt.figure(figsize=(10, 6))
+    scatter = plt.scatter(
+        data_year["population"],
+        data_year["total_co2"],
+        alpha=0.7,
+        c='blue',
+        edgecolors='k',
+        s=50
+    )
+
+    # Annotate countries (optional: show only top emitters or sampled subset to avoid clutter)
+    for i, row in data_year.nlargest(n, "total_co2").iterrows():
+        plt.annotate(row["Country"], (row["population"], row["total_co2"]), fontsize=10)
+
+    # Log scales
+    plt.xscale("log")
+    plt.yscale("log")
+
+    # Labels and title
+    plt.xlabel("Population (log scale)")
+    plt.ylabel("Total CO₂ Emissions (log scale)")
+    plt.title(f"CO₂ Emissions vs. Population (Log-Log Scale) - {year}")
+    plt.grid(True, which="both", linestyle="--", alpha=0.5)
+
+    plt.tight_layout()
+    filename = f"study6_co2_emissions_vs_pop.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Plot saved as {filename}")
 
 #study 7 plots, graphs
 
