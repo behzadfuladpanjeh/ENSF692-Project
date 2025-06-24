@@ -367,7 +367,7 @@ def scatter_cont_pop_vs_co2(data, year_filter, top_n):
                 ha='center', va='bottom', fontsize=8)
 
     # Axis labeling
-    ax.set_title(f"Top {top_n} Countries by CO₂ per GDP (Carbon Intensity) - {year_of_interest}")
+    ax.set_title(f"Top {top_n} Countries by CO₂ per GDP (Carbon Intensity) - {year_filter}")
     ax.set_ylabel("CO₂ per unit GDP (tons/USD)")
     ax.set_xlabel("Country")
     ax.set_xticklabels(top_countries["Country"], rotation=45, ha="right")
@@ -539,7 +539,9 @@ def study8_menu(data):
 def study9_menu(data):
 
 if __name__ == "__main__":
-    main()
+    loader = DataLoader()
+    data = loader.load_and_prepare_data()
+    main_menu(data)
 
 
  #plots used for presentation
