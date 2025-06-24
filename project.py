@@ -560,6 +560,59 @@ def co2_emissions_population(data, year):
     print(f"Plot saved as {filename}")
 
 #study 7 plots, graphs
+def most_improved(data, start_year, end_year, n):
+    """shows the countries that have the most reduced co2 emissions for a specified year
+
+    Parameters
+    ----------
+    data : dataframe
+        cleaned and merged csv files that contain continents, countries, years and other useful information
+    start_year : int
+        start year that the user inputs and wants to compare the data to end year
+    end_year : int
+        end year that the user inputs and wants the data to stop at
+    n : int
+        number of countries the user wants to see the results for
+    """
+    # Ensure country names are consistent
+    data["Country"] = data["Country"].str.strip()
+
+    # Filter data for the start and end years
+    start_data = data[data["year"] == start_year][["Country", "co2"]].copy()
+    end_data = data[data["year"] == end_year][["Country", "co2"]].copy()
+
+    # Rename columns for clarity
+    start_data.rename(columns={"co2": "start_co2"}, inplace=True)
+    end_data.rename(columns={"co2": "end_co2"}, inplace=True)
+
+    # Merge data on Country
+    change_df = pd.merge(start_data, end_data, on="Country", how="inner")
+
+    # Drop missing values
+    change_df.dropna(inplace=True)
+
+    # Calculate absolute and percent change
+    change_df["change"] = change_df["end_co2"] - change_df["start_co2"]
+    change_df["percent_change"] = 100 * (change_df["change"] / change_df["start_co2"].replace(0, float("nan")))
+
+    # Filter out countries with very small initial emissions to avoid distortion
+    change_df = change_df[change_df["start_co2"] > 1.0]
+
+    # Get top 15 countries with the largest decrease in CO2 per capita
+    most_improved = change_df.sort_values(by="change").head(n)
+
+    # Plot the results
+    plt.figure(figsize=(12, 6))
+    bars = plt.barh(most_improved["Country"], most_improved["change"], color="seagreen")
+    plt.xlabel("Reduction in CO₂ per Capita (%)")
+    plt.title(f"Top {n} Most Improved Countries in CO₂ per Capita ({start_year} to {end_year})")
+    plt.gca().invert_yaxis()  # Show largest improvements at the top
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    filename = f"study7_most_improved.png"
+    plt.savefig
+    plt.show()
+    print(f"Graph saved as {filename}")
 
 #user inputs
 def get_year(data):
