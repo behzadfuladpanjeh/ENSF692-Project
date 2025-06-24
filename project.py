@@ -334,6 +334,20 @@ def corr_pop_co2(data):
 
 #study 3 plots, graphs
 def scatter_cont_pop_vs_co2(data, year_filter, top_n):
+    """scatter plot between continents, population and co2
+
+    Parameters
+    ----------
+    data : dataframe 
+        cleaned data that contains continent, country, years and other useful information
+    year_filter : int
+        user input for year
+    top_n : int
+        number of continents they want to include
+
+    Returns
+        None
+    """
     # Define the year and number of countries to display
     scatter_data = data[data["year"] == year_filter]
 
@@ -380,6 +394,20 @@ def scatter_cont_pop_vs_co2(data, year_filter, top_n):
 
 #study 4 plots, graphs
 def timeseries_count(data, countries, start_year):
+    """plot of 3 different things for gdp per capita over time, co2 emissions per capita over time, and population over time
+
+    Parameters
+    ----------
+    data : dataframe
+        cleaned data that contains continent, country, years and other useful information
+    countries : an array of string
+        countires inputted by user
+    start_year : int
+        start year that the user wants the plot to start at
+
+    REturns
+        None
+    """
     data_filtered = data.copy()
     if start_year:
         data_filtered = data_filtered[data_filtered['year'] >= start_year]
@@ -431,8 +459,53 @@ def timeseries_count(data, countries, start_year):
     plt.show()
     print(f"Saved plot as {filename}")
 
-
 #study 5 plots, graphs
+def emissions_continents(data, year):
+    """plot co2 per capita, for specified countires and years
+
+    Parameters
+    ----------
+    data : dataframe
+        cleaned and merged csv files that contain continents, countries, years and other useful information
+    year : int
+        year that is specified by the user input
+    
+    Return
+        None
+    """
+    #filter for selected coutnries and years
+    data_year = data[data["year"] == year]
+
+    # Drop rows with missing values
+    data_year = data_year.dropna(subset=["co2", "gdp"])
+
+    # Group by continent and calculate average CO₂ and GDP per capita
+    continent_summary = data_year.groupby("Continent")[["co2", "gdp"]].mean().sort_values("co2", ascending=False)
+
+    # Plotting
+    fig, ax1 = plt.subplots(figsize=(10, 6))
+
+    # Plot CO₂ per capita
+    color1 = 'skyblue'
+    ax1.bar(continent_summary.index, continent_summary["co2"], color=color1, width=0.4, label="CO₂ per Capita")
+    ax1.set_ylabel("Average CO₂ per Capita (tons)", color=color1)
+    ax1.tick_params(axis='y', labelcolor=color1)
+
+    # Add second Y-axis for GDP per capita
+    ax2 = ax1.twinx()
+    color2 = 'orange'
+    ax2.plot(continent_summary.index, continent_summary["gdp"], color=color2, marker='o', label="GDP per Capita")
+    ax2.set_ylabel("Average GDP per Capita (USD)", color=color2)
+    ax2.tick_params(axis='y', labelcolor=color2)
+
+    # Title and layout
+    plt.title(f"Average CO₂ and GDP per Capita by Continent ({year})")
+    plt.grid(True, axis='y', linestyle='--', alpha=0.5)
+    fig.tight_layout()
+    filename = f"study5_emmissions_continents.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Saved plot as {filename}")
 
 #study 6 plots, graphs
 
