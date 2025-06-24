@@ -573,6 +573,9 @@ def most_improved(data, start_year, end_year, n):
         end year that the user inputs and wants the data to stop at
     n : int
         number of countries the user wants to see the results for
+    
+    REturn
+        None
     """
     # Ensure country names are consistent
     data["Country"] = data["Country"].str.strip()
@@ -613,6 +616,53 @@ def most_improved(data, start_year, end_year, n):
     plt.savefig
     plt.show()
     print(f"Graph saved as {filename}")
+
+#study 8 figure
+def trend_specific_country_year(data, country, year):
+    """plots co2 per capita, gdp per capita for a population over a specified country and year
+
+    Parameters
+    ----------
+    data : dataframe
+        cleaned and merged csv files that contain continents, countries, years and other useful information
+    country : array of strings
+        user specfied array of strings of countries
+    year : int
+        user specifed int for the year
+    
+    Return
+        None
+    """
+    filtered = data[(data['Country'] == country) & (data['year'].isin(year))].sort_values(by='year')
+
+    if filtered.empty:
+        print(f"No data found for {country} in years {year}.")
+    
+    # Plot setup
+    fig, ax1 = plt.subplots(figsize=(12, 6))
+
+    # CO₂ per capita
+    ax1.plot(filtered['year'], filtered['co2'], color='crimson', marker='o', label='CO₂ per capita (tons)')
+    ax1.set_xlabel('Year')
+    ax1.set_ylabel('CO₂ per capita (tons)', color='crimson')
+    ax1.tick_params(axis='y', labelcolor='crimson')
+
+    # Create a second y-axis for GDP
+    ax2 = ax1.twinx()
+    ax2.plot(filtered['year'], filtered['gdp'], color='navy', marker='s', label='GDP per capita ($)')
+    ax2.set_ylabel('GDP per capita (USD)', color='navy')
+    ax2.tick_params(axis='y', labelcolor='navy')
+
+    # Add population on third axis using text annotations
+    for i, row in filtered.iterrows():
+        ax1.annotate(f"Pop: {int(row['population']):,}", 
+                (row['year'], row['co2']),
+                textcoords="offset points", xytext=(0,10),
+                ha='center', fontsize=8, color='darkgreen')
+    plt.title(f"{country} - CO₂, GDP, and Population Over Time")
+    fig.tight_layout()
+    plt.grid(True)
+    plt.show()
 
 #user inputs
 def get_year(data):
@@ -863,6 +913,25 @@ def study7_menu(data):
             print("Please enter a correct letter from the sub menu") 
 
 def study8_menu(data):
+    """study 8 menu that prompts user to input if they want to start to get the figures or exit
+
+    Parameters
+    ----------
+    data : dataframe 
+        contains the cleaned and merged data from csv files
+
+    Return
+        None
+    """
+    while True:
+        print("Study 8 Menu: a) Start b) exit")
+        user_input = input("Please enter a letter from the menu: ").lower()
+        if user_input == 'a':
+            trend_specific_country_year(data, get_countries, get_year)
+        elif user_input == 'b':
+            break
+        else:
+            print("Please enter a correct letter from the sub menu") 
 
 if __name__ == "__main__":
     loader = DataLoader()
