@@ -4,7 +4,7 @@ ENSF 692 Group Project
 @Authors: Behzad, Matin
 @Group: Group #5
 
-This program so far imports global datasets (CO2 emissions, GDP per capita, population and continents), merges, cleans, reshapes, and visualizes the data.
+This program imports global datasets (CO2 emissions, GDP per capita, population and continents), merges, cleans, reshapes, and visualizes the data.
 """
 
 #references
@@ -22,14 +22,16 @@ This program so far imports global datasets (CO2 emissions, GDP per capita, popu
 #[12] Matplotlib documentation, "Chooseing Colormaps in Matplotlib," Matplotlib 3.8.4 documentation. [Online]. Available: https://matplotlib.org/stable/users/explain/colors/colormaps.html. [Accessed: June 21, 2025].
 #[13] Matplotlib documentation, "matplotlib.pyplot.xticks," Matplotlib 3.8.4 documentation. [Online]. Available: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xticks.html. [Accessed: June 21, 2025].
 #[14] Matplotlib documentation, "matplotlib.pyplot.yticks," Matplotlib 3.8.4 documentation. [Online]. Available: https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.yticks.html. [Accessed: June 21, 2025].
-
+#[15] Python Software Foundation, "os - Miscellaneous operating system interfaces," Python 3.11.4 documentation. [Online]. Available: https://docs.python.org/3/library/os.html. [Accessed: June 22, 2025].
+#[16] Python Software Foundation, "sys - System-specific parameters and functions interfaces," Python 3.11.4 documentation. [Online]. Available: https://docs.python.org/3/library/sys.html. [Accessed: June 22, 2025].
+#[17] Seaborn Development Team, "scatterplot, lineplot functions," Seaborn 0.12.2 Documentation. [Online]. Available: https://seaborn.pydata.org/api.html. [Accessed: June 22, 2025].
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-import sys
-import seaborn as sns
+import os #[15]
+import sys #[16]
+import seaborn as sns #[17]
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -924,6 +926,7 @@ def study8_menu(data):
     Return
         None
     """
+    #checks for unique country and year
     check_country = data['Country'].unique()
     check_year = data['year'].unique()
 
@@ -931,7 +934,7 @@ def study8_menu(data):
         print("Study 8 Menu: a) Start b) exit")
         user_input = input("Please enter a letter from the menu: ").lower()
         if user_input == 'a':
-            
+            #akss for single country
             while True:
                 country = input("Enter a single country: ").strip()
                 if country in check_country:
@@ -939,13 +942,15 @@ def study8_menu(data):
                 print(f"{country} not found, try again with a valid country. ex. Algeria")
 
             while True:
+                #asks for multiple years seperated by comma
                 years_input = input("Enter years seperated by commas (ex. 2000, 2001, 2002,...)")
                 try:
+                    #splits years by comma
                     years = [int(y.strip()) for y in years_input.split(',')]
                 except ValueError:
                     print("Please enter only valid years, seperated by commas")
                     continue
-
+                #checcks if the years inputted by usser is actually in dataset    
                 invalid_years = [y for y in years if y not in check_year]
                 if invalid_years:
                     print(f"Years are not in dataset: {invalid_years}")
