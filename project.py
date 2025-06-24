@@ -443,6 +443,43 @@ def get_n():
             return int(n)
         print("Please enter a vaild number greater than 0")
 
+#main menu for user
+def main_menu(data):
+    """outputs main menu to user in terminal and asks them to choose one of the studies
+
+    Parameters
+    ----------
+    data : dataframe
+        contains the cleaned and merged data from csv files
+    Returns
+        none
+    """
+    titles=["Economic Growth vs Emissions", "High Population, Low Emissions", "CO2 per GDP", "Time-Series", "Continental Emissiosn Comparison", "CO2 Emissions vs Population", "Most improved", "Devloped vs Developing Countries", "Outliers in Emissions"]
+    while True:
+        for i,t in enumerate(titles,1):
+            print(f"{i}) {t}")
+        print("0) Exit")
+        user_input = input("Select study: ")
+        if user_input == '1':
+            study1_menu(data)
+        elif user_input == '2':
+            study2_menu(data)
+        elif user_input == '3':
+            study3_menu(data)
+        elif user_input == '4':
+            study4_menu(data)
+        elif user_input == '5':
+            study5_menu(data)
+        elif user_input == '6':
+            study6_menu(data)
+        elif user_input == '7':
+            study7_menu(data)
+        elif user_input == '8':
+            study8_menu(data)
+        elif user_input == '9':
+            study9_menu(data)
+        elif user_input == '0':
+            break
 
 
 if __name__ == "__main__":
