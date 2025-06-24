@@ -4,7 +4,7 @@ ENSF 692 Group Project
 @Authors: Behzad, Matin
 @Group: Group #5
 
-This program imports global datasets (CO2 emissions, GDP per capita, population and continents), merges, cleans, reshapes, and visualizes the data.
+This program imports global datasets (CO2 emissions, GDP per capita, population and continents), merges, cleans, reshapes, and visualizes the data with user input for analysis.
 """
 
 #references
