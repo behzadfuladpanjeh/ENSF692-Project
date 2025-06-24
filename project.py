@@ -379,6 +379,58 @@ def scatter_cont_pop_vs_co2(data, year_filter, top_n):
     print(f"Saved scatter plot as {filename}")
 
 #study 4 plots, graphs
+def timeseries_count(data, countries, start_year):
+    data_filtered = data.copy()
+    if start_year:
+        data_filtered = data_filtered[data_filtered['year'] >= start_year]
+
+    #plot GDP per capita over time
+    plt.figure(figsize=(10, 6))
+    for country in countries:
+        subset = data_filtered[data_filtered['Country'] == country]
+        plt.plot(subset['year'], subset['gdp'], label=country)
+    plt.title(f"GDP per Capita ({start_year or data_filtered['year'].min()}–{data_filtered['year'].max()})")
+    plt.xlabel('Year')
+    plt.ylabel('GDP per Capita (USD)')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    filename = f"study4_gdp_overtime_{start_year or 'all'}.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Saved GDP over time as {filename}")
+
+    #plot co2 emissions per capita over time
+    plt.figure(figsize=(10, 6))
+    for country in countries:
+        subset = data_filtered[data_filtered["Country"] == country]
+        plt.plot(subset["year"], subset["co2"], label=country)
+    plt.title(f"CO₂ Emissions per Capita ({start_year or data_filtered['year'].min()}–{data_filtered['year'].max()})")
+    plt.xlabel("Year")
+    plt.ylabel("CO₂ per Capita (tons)")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    filename = f"study4_emmissions_capita.png"
+    plt.show()
+    print(f"Saved plot as {filename}")
+
+    #plot 3 population over time
+    plt.figure(figsize=(10, 6))
+    for country in countries:
+        subset = data_filtered[data_filtered["Country"] == country]
+        plt.plot(subset["year"], subset["population"] / 1e6, label=country)  # Convert to millions
+    plt.title(f"Population in Millions ({start_year or data_filtered['year'].min()}–{data_filtered['year'].max()})")
+    plt.xlabel("Year")
+    plt.ylabel("Population (Millions)")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    filename = f"study4_population_overtime.png"
+    plt.savefig(filename)
+    plt.show()
+    print(f"Saved plot as {filename}")
+
 
 #study 5 plots, graphs
 
