@@ -53,7 +53,7 @@ def scatter_gdp_vs_co2(data, year_filter):
     """
     scatter_data = data[data["year"] == year_filter]
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(data=scatter_data, x="gdp", y="co2", hue="Continent", alpha=0.7)
+    sns.scatterplot(data=scatter_data, x="gdp", y="co2", hue="Continent", alpha=0.7) #[3] [6]
     plt.xscale("log")
     plt.yscale("log")
     plt.title(f"GDP vs CO₂ per Capita ({year_filter})")
@@ -90,7 +90,7 @@ def top_co2_with_gdp(data, year):
     gdp_values = top_15['total_gdp']
     
     #bar settings
-    x = np.arange(len(countries)) #label locations
+    x = np.arange(len(countries)) #label locations [8]
     width=0.4 #width of the bars
 
     #create plot
@@ -121,7 +121,7 @@ def top_co2_with_gdp(data, year):
 
     plt.tight_layout(); 
     filename = f"study1_top15_co2_gdp_{year}.png"
-    plt.savefig(filename)
+    plt.savefig(filename) [12]
     plt.show()
     print(f"Saved bar chart as {filename}")
 
@@ -171,11 +171,11 @@ def correlation_trend(data):
     #makes the infinity as na so the correlation ignores/skips the infinity entries
     with pd.option_context('mode.use_inf_as_na', True):
         # Calculate Pearson correlation between GDP and CO₂ per capita for each year
-        correlation_by_year = data.groupby("year").apply(lambda group: group["gdp"].corr(group["co2"])).reset_index(name="pearson_correlation")
+        correlation_by_year = data.groupby("year").apply(lambda group: group["gdp"].corr(group["co2"])).reset_index(name="pearson_correlation") #[5]
 
     # Plot the correlation trend over time
     plt.figure(figsize=(12, 6))
-    sns.lineplot(data=correlation_by_year, x="year", y="pearson_correlation", marker="o")
+    sns.lineplot(data=correlation_by_year, x="year", y="pearson_correlation", marker="o") [7]
     plt.title(f"Pearson Correlation Between GDP and CO2 per Capita Over Time")
     plt.xlabel("Year")
     plt.ylabel("Pearson Correlation Coefficient")
@@ -981,7 +981,7 @@ if __name__ == "__main__":
     print(data.describe())
 
     #pivot table requirement
-    pivot_table_co2 = data.pivot_table(values='co2', index='Continent', columns='year', aggfunc='mean')
+    pivot_table_co2 = data.pivot_table(values='co2', index='Continent', columns='year', aggfunc='mean') #[10]
     print("Printing pivot table of the CO2 per capita by continent and year")
     print(pivot_table_co2)
 
