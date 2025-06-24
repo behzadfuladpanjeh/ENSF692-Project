@@ -391,6 +391,59 @@ def scatter_cont_pop_vs_co2(data, year_filter):
 
 #study 9 plots, graphs
 
+#user inputs
+def get_year(data):
+    """gets the user input of the year
+    Parameters
+    ----------
+    data : dataframe
+        contains the cleaned and merged data from csv files
+    
+    Returns
+        user input as int, if its a valid year
+    """
+    while True:
+        user_input = ("Enter a year: ")
+        if user_input.isdigit() and int(user_input) in data['year'].unique():
+            return int(user_input)
+        print("Please enter a valid year from 1800-2022")
+
+def get_countries(data):
+    """gets a list of user input countries and returns it if its valid and unique from the dataframe
+
+    Parameters
+    ----------
+    data : dataframe
+        contains the cleaned and merged data from csv files
+
+    Returns
+    -------
+    returns a list
+        returns the user input as list if its valid
+    """
+    check = data['Country'].unique()
+    while True:
+        user_input = input("Enter countires seperated by commas: ")
+        count = [inp.strip() for inp in user_input.split(',')]
+        if all(inp in check for inp in count):
+            return count
+        print("Please enter valid country names")
+
+def get_n():
+    """gets an integer from the user and makes sure its above 0
+
+    Returns
+    -------
+    int
+        returns an integer that is greater than 0
+    """
+    while True:
+        n = input("Enter a number of countries: ")
+        if n.isdigit() and int(n) > 0:
+            return int(n)
+        print("Please enter a vaild number greater than 0")
+
+
 
 if __name__ == "__main__":
     main()
